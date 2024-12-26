@@ -1,0 +1,93 @@
+import plotly.express as px
+import plotly.graph_objects as go
+import pandas as pd
+from sklearn.mixture import GaussianMixture
+
+# Load the UMAP DataFrame from the CSV file
+umap_df = pd.read_csv("/Users/akhilkumar/Downloads/UMAP/umap_results.csv")
+
+# Load the numerical data DataFrame from the CSV file
+numerical_data = pd.read_csv("/Users/akhilkumar/Downloads/UMAP/numerical_data.csv")
+
+# --- GMM Clustering ---
+# Fit Gaussian Mixture Model (GMM) for clustering
+gmm = GaussianMixture(n_components=5, random_state=42)  # Adjust n_components as needed
+gmm_labels = gmm.fit_predict(umap_df[['UMAP 1', 'UMAP 2', 'UMAP 3']])  # Using UMAP data
+
+# Add GMM labels to the UMAP DataFrame
+umap_df['Cluster'] = gmm_labels
+
+# --- Cluster Centroid Calculations ---
+# Step 1: Calculate the means (centroids) of the clusters in the UMAP space
+cluster_centroids_umap = umap_df.groupby('Cluster')[['UMAP 1', 'UMAP 2', 'UMAP 3']].mean()
+
+# Step 2: Calculate the means of the clusters in the original feature space
+numerical_data_with_labels = numerical_data.copy()
+numerical_data_with_labels['Cluster'] = gmm_labels
+
+# Compute the mean of each cluster for the original features
+cluster_centroids_features = numerical_data_with_labels.groupby('Cluster').mean()
+
+# Step 1: Prepare the data for visualization
+# Create a DataFrame that combines the centroids of each cluster for the original features
+feature_columns = numerical_data.columns  # List of feature names
+centroid_data = []
+
+# Populate the data with cluster feature centroids
+for cluster in range(gmm.n_components):
+    centroid_values = cluster_centroids_features.loc[cluster].values
+    for feature, value in zip(feature_columns, centroid_values):
+        centroid_data.append({
+            'Cluster': f'Cluster {cluster}',
+            'Feature': feature,
+            'Centroid Value': value
+        })
+
+# Create a DataFrame from the centroid data
+centroid_df = pd.DataFrame(centroid_data)
+
+# Step 2: Create an interactive bar chart using Plotly Express
+fig_bar = px.bar(centroid_df,
+                 x='Feature',
+                 y='Centroid Value',
+                 color='Cluster',
+                 barmode='group',  # This makes the bars grouped by Cluster
+                 title='Feature Centroids for Each Cluster',
+                 labels={'Centroid Value': 'Mean Feature Value'},
+                 hover_data={'Cluster': True, 'Feature': True, 'Centroid Value': True})
+
+# Step 3: Customize layout for better readability
+fig_bar.update_layout(
+    xaxis_title="Feature",
+    yaxis_title="Centroid Value",
+    xaxis_tickangle=-45,  # Rotating x-axis labels for better readability
+    height=600,
+    margin=dict(l=20, r=20, t=50, b=20)
+)
+
+# Create a table for the cluster centroids in the UMAP space
+fig_table = go.Figure(data=[go.Table(
+    header=dict(values=["Cluster", "UMAP 1", "UMAP 2", "UMAP 3"],
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=[cluster_centroids_umap.index, cluster_centroids_umap['UMAP 1'], cluster_centroids_umap['UMAP 2'], cluster_centroids_umap['UMAP 3']],
+               fill_color='lavender',
+               align='left'))
+])
+
+fig_table.update_layout(
+    title="UMAP Space Cluster Centroids",
+    height=300,
+    margin=dict(l=20, r=20, t=50, b=20)
+)
+
+# Combine the bar chart and the table into a single figure
+fig_combined = go.Figure(data=fig_bar.data + fig_table.data)
+fig_combined.update_layout(
+    title="Cluster Information",
+    height=900,
+    margin=dict(l=20, r=20, t=50, b=20)
+)
+
+# Show the combined figure
+fig_combined.show()
