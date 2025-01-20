@@ -1,43 +1,56 @@
-# 🌐 Semiconductor Manufacturing Process Optimization with AI 🤖
+# Semiconductor Manufacturing Process Optimization with UMAP and GMM 🛠️
 
-## 🚀 Overview
+## 📈 Overview
 
-Semiconductor production involves complex, multi-stage processes where even the smallest deviations can lead to significant waste (Acemoglu & Restrepo, 2018). Despite automation, inefficiencies persist, often requiring manual interventions that hinder productivity. 🌱 Artificial Intelligence (AI) presents an exciting opportunity to standardize processes and reduce errors, but its integration into existing systems remains challenging due to data requirements and implementation complexities (Brynjolfsson, Rock & Syverson, 2017).
+Semiconductor manufacturing involves complex, multi-stage processes where even minor deviations can result in significant waste. Although automation is used, inefficiencies remain, often requiring manual interventions. This project utilizes **UMAP (Uniform Manifold Approximation and Projection)** for dimensionality reduction and **Gaussian Mixture Models (GMM)** for clustering to improve process standardization and error reduction in semiconductor production. 🤖
 
-## 🔍 Problem Statement
+## 🧐 Problem
 
-In semiconductor manufacturing, **recipes** are critical for wafer production. These recipes outline the parameters and instructions for various processes, such as etching, dosing, and chemical-mechanical polishing (CMP). Recipes are categorized as follows:
+In semiconductor production, **recipes** define the steps for wafer manufacturing, such as etching, dosing, and chemical-mechanical polishing (CMP). These recipes are categorized as:
 
-- **Basic Recipes:** General standards for specific materials and processes. 📋
-- **Plant Recipes:** Custom recipes tailored to the unique needs of individual plants. ⚙️
+- **Basic Recipes:** General standards for specific materials and processes. 📜
+- **Plant Recipes:** Custom recipes tailored to plant-specific requirements. 🏭
 
-In the field of CMP, different materials (e.g., tungsten oxide and copper) require specialized systems or adapted recipe variants. With 11 systems available, many of them optimized for single materials or multiple materials, this results in a large number of sub-recipes. This creates:
+The CMP process involves materials like tungsten oxide and copper, each requiring different systems and recipe variants. With **11 systems** in use, many optimized for specific materials, this leads to a large number of sub-recipes, increasing administrative overhead. This complexity hinders standardization and reduces production efficiency. ⚙️
 
-- **High Administrative Burden** 📂
-- **Difficulty in Standardization** 🛠️
-- **Inefficiencies in the Production Process** ⚡
+## 🚀 Approach
 
-## 🤔 Challenges
+This project uses **UMAP** for dimensionality reduction and **GMM** for clustering to:
 
-- **Complex Recipe Structure:** The numerous variations of recipes and sub-recipes for different materials increase management complexity.
-- **Inefficient Production Processes:** Heavy reliance on manual intervention reduces overall productivity.
-- **AI Integration Complexity:** AI has the potential to optimize processes, but integrating it into the current system is challenging due to large datasets and complex implementation. 🤯
+- Simplify the recipe structure by identifying clusters of similar recipes using GMM. 🔍
+- Visualize high-dimensional process data with UMAP to uncover patterns and key features. 📊
+- Optimize process steps and reduce the number of sub-recipes, improving efficiency. 🏆
 
-## 💡 Solution Approach
+## 🔬 Methodology
 
-To improve efficiency and standardize semiconductor manufacturing processes, we need to simplify or standardize the recipe structure. By incorporating AI, we aim to:
+1. **Data Preprocessing:** 
+   - Collect process data from various recipes, systems, and materials. 
+   - Normalize and preprocess the data for analysis. 🧑‍💻
 
-- **Streamline Recipe Management** 📝: Reduce the number of sub-recipes and administrative tasks.
-- **Enhance Process Standardization** 🔧: Achieve more consistent and predictable outcomes across different materials and systems.
-- **Boost Automation** ⚙️: Minimize manual interventions and improve overall productivity, while reducing errors.
+2. **Dimensionality Reduction with UMAP:** 
+   - Apply UMAP to reduce the dimensionality of the data, enabling easier analysis and visualization of high-dimensional features. 🔽
 
-This solution focuses on creating an **optimized, AI-driven system** that can seamlessly integrate into existing production workflows, enabling more efficient and standardized semiconductor manufacturing.
+3. **Clustering with GMM:** 
+   - Use GMM to identify clusters of similar recipes, making it easier to standardize processes and streamline production. 🧩
 
-## ✨ Key Features
+4. **Optimization:** 
+   - Analyze the clusters to identify inefficiencies, redundancies, or deviations in the process. 
+   - Propose a simplified and standardized recipe structure for improved production. ⚡
 
-- **Recipe Optimization** 📊: Simplify and standardize process recipes for various materials and systems.
-- **AI-Powered Process Monitoring** 👁️: Use AI to identify deviations and suggest corrective actions, reducing manual intervention.
-- **Data-Driven Insights** 📈: Leverage real-time data from production processes to continually improve performance and minimize waste.
+## 🏅 Key Benefits
+
+- **Dimensionality Reduction:** UMAP makes high-dimensional data more manageable, helping identify trends and patterns. 📉
+- **Cluster Identification:** GMM groups similar recipes, reducing the number of unique sub-recipes and optimizing workflow. 📦
+- **Process Optimization:** Identifying inefficiencies and deviations helps streamline production and improve overall efficiency. 🔄
+
+## 🛠️ Requirements
+
+- Python 3.x
+- UMAP
+- scikit-learn (for GMM and clustering)
+- pandas
+- numpy
+- matplotlib (for visualizations)
 
 ## 📚 References
 
